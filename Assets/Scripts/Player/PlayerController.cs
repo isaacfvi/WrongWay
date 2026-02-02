@@ -41,16 +41,8 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovementInput()
     {
-        Vector2 input = moveAction.ReadValue<Vector2>();
-
-        Vector2 movementForce = (transform.right * input.x + transform.up * input.y).normalized * movementSpeed;
-
-        MovePlayer(movementForce);
-    }
-
-    private void MovePlayer(Vector2 movementForce)
-    {
-        rb.velocity = new Vector2(movementForce.x, movementForce.y);
+       Vector2 input = moveAction.ReadValue<Vector2>();
+        rb.velocity = input.normalized * movementSpeed;
     }
 
 }
