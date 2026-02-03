@@ -5,8 +5,13 @@ using UnityEngine.PlayerLoop;
 
 public class FootPrintZone : MonoBehaviour
 {
+    [Tooltip("Footprint Prefab")]
     public GameObject footprintPrefab;
+    [Tooltip("Time between footprints")]
     public float timeToFootprint = 0.5f;
+
+    [Tooltip("Footprint Holder")]
+    public GameObject footprintHolder;
 
     private float timer;
     private Transform currentTarget;
@@ -15,7 +20,6 @@ public class FootPrintZone : MonoBehaviour
     {
         
         if (currentTarget == null) return;
-        Debug.Log("Rodando: " + timer);
         timer += Time.fixedDeltaTime;
 
         if (timer >= timeToFootprint)
@@ -23,7 +27,8 @@ public class FootPrintZone : MonoBehaviour
             Instantiate(
                 footprintPrefab,
                 currentTarget.position,
-                Quaternion.identity
+                Quaternion.identity,
+                footprintHolder.transform
             );
 
             timer = 0f;
@@ -32,14 +37,12 @@ public class FootPrintZone : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Entrou");
         currentTarget = collision.transform;
         timer = 0f;
     }
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("Saiu");
         if (collision.transform == currentTarget)
         {
             currentTarget = null;
