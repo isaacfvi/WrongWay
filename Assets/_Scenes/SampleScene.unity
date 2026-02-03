@@ -1261,6 +1261,7 @@ GameObject:
   - component: {fileID: 1082078003}
   - component: {fileID: 1082078002}
   - component: {fileID: 1082078001}
+  - component: {fileID: 1082078004}
   m_Layer: 9
   m_Name: Dirt
   m_TagString: Untagged
@@ -1956,6 +1957,20 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &1082078004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082077999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54e5ac2485c6a7d4e91bc9af09a04464, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footprintPrefab: {fileID: 2716352830883169034, guid: 59496a82162adbf45928a3f180468eff, type: 3}
+  timeToFootprint: 0.5
 --- !u!4 &1955969821 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3055792815373530646, guid: 911f1add3dcd1664385777f75bb634ea, type: 3}
@@ -2020,6 +2035,14 @@ PrefabInstance:
     - target: {fileID: 3055792815373530646, guid: 911f1add3dcd1664385777f75bb634ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3763322664792576638, guid: 911f1add3dcd1664385777f75bb634ea, type: 3}
+      propertyPath: m_Size.y
+      value: 0.9978936
+      objectReference: {fileID: 0}
+    - target: {fileID: 3763322664792576638, guid: 911f1add3dcd1664385777f75bb634ea, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.4989468
       objectReference: {fileID: 0}
     - target: {fileID: 6301038781960390982, guid: 911f1add3dcd1664385777f75bb634ea, type: 3}
       propertyPath: m_Layer
