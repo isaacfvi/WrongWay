@@ -10,6 +10,7 @@ public class Trasnparency : MonoBehaviour
     void Start()
     {
         tree = gameObject.GetComponent<SpriteRenderer>();
+        tree.sortingOrder = -Mathf.RoundToInt(transform.position.y);
     }
 
     void OnTriggerEnter2D(Collider2D collision)

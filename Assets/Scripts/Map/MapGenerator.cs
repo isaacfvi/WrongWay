@@ -30,10 +30,6 @@ public class MapGenerator : MonoBehaviour
     public int width = 20;
     [Tooltip("Pelin Noise Scale")]
     public float scale = 1;
-    
-    private Vector2 seed;
-    private float waterThreashHold = 0.3f;
-    private float grassThreashHold = 0.7f;
 
     void Start()
     {
@@ -41,6 +37,24 @@ public class MapGenerator : MonoBehaviour
     }
 
     public void GenerateMap()
+    {
+        LayoutMapGenerate();
+        ForestGenerate();
+    }
+
+    [ContextMenu("Generate New Map")]
+    void GenerateNewMap()
+    {
+        GenerateMap();
+    }
+
+    #region Laout Generation
+
+    private Vector2 seed;
+    private float waterThreashHold = 0.2f;
+    private float grassThreashHold = 0.7f;
+
+    void LayoutMapGenerate()
     {   
         if(grassTile == null || dirtTile == null || waterTile == null)
         {
@@ -59,14 +73,14 @@ public class MapGenerator : MonoBehaviour
         dirtTilemap.ClearAllTiles();
         waterTilemap.ClearAllTiles();
 
-        seed = new Vector2(Random.Range(50f, 100f), Random.Range(50f, 100f));
+        seed = new Vector2(Random.Range(-1000f, 1000f), Random.Range(-1000f, 1000f));
 
         for(int i = 0; i < height; i++)
         {
             for(int j = 0; j < width; j++)
             {
-                float xCoord = (float)i / width * scale * seed.x;
-                float yCoord = (float)j / height * scale * seed.y;
+                float xCoord = (float)i / width * scale + seed.x;
+                float yCoord = (float)j / height * scale + seed.y;
                 float noiseValue = Mathf.PerlinNoise(xCoord, yCoord);
 
                 Vector3Int position = new Vector3Int(i, j, 0);
@@ -102,64 +116,135 @@ public class MapGenerator : MonoBehaviour
         waterTilemap.RefreshAllTiles();
     }
 
-    [ContextMenu("Generate New Map")]
-    void GenerateNewMap()
-    {
-        GenerateMap();
-    }
-
     void FixIsolatedTiles()
-{
-    for(int i = 0; i < height; i++)
     {
-        for(int j = 0; j < width; j++)
+        for(int i = 0; i < height; i++)
         {
-            Vector3Int position = new Vector3Int(i, j, 0);
-            
-            // Verificar se é um Tile isolado e o remove devido a falta de sprites 
-            if(dirtTilemap.HasTile(position))
+            for(int j = 0; j < width; j++)
             {
-                if(CheckIfIsolated(position, dirtTilemap))
+                Vector3Int position = new Vector3Int(i, j, 0);
+                
+                // Verificar se é um Tile isolado e o remove devido a falta de sprites 
+                if(dirtTilemap.HasTile(position))
                 {
-                    dirtTilemap.SetTile(position, null);
-                    grassTilemap.SetTile(position, grassTile);
+                    if(CheckIfIsolated(position, dirtTilemap))
+                    {
+                        dirtTilemap.SetTile(position, null);
+                        grassTilemap.SetTile(position, grassTile);
+                    }
                 }
-            }
-            
-            if(waterTilemap.HasTile(position))
-            {
-                bool isIsolated = CheckIfIsolated(position, waterTilemap);
-                if(isIsolated)
+                
+                if(waterTilemap.HasTile(position))
                 {
-                    waterTilemap.SetTile(position, null);
-                    grassTilemap.SetTile(position, grassTile);
+                    bool isIsolated = CheckIfIsolated(position, waterTilemap);
+                    if(isIsolated)
+                    {
+                        waterTilemap.SetTile(position, null);
+                        grassTilemap.SetTile(position, grassTile);
+                    }
                 }
             }
         }
     }
-    
-    RefreshTiles();
-}
 
-bool CheckIfIsolated(Vector3Int position, Tilemap tilemap)
-{
-    int adjacentDirtCount = 0;
-    Vector3Int[] neighborsPos = {
-        new Vector3Int(position.x - 1, position.y),
-        new Vector3Int(position.x, position.y - 1),
-        new Vector3Int(position.x, position.y + 1),
-        new Vector3Int(position.x + 1, position.y)
-        };
-
-    foreach (Vector3Int neighborPos in neighborsPos)
+    bool CheckIfIsolated(Vector3Int position, Tilemap tilemap)
     {
-        if(tilemap.HasTile(neighborPos))
+        int adjacentDirtCount = 0;
+        Vector3Int[] neighborsPos = {
+            new Vector3Int(position.x - 1, position.y),
+            new Vector3Int(position.x, position.y - 1),
+            new Vector3Int(position.x, position.y + 1),
+            new Vector3Int(position.x + 1, position.y)
+            };
+
+        foreach (Vector3Int neighborPos in neighborsPos)
         {
-            adjacentDirtCount++;
+            if(tilemap.HasTile(neighborPos))
+            {
+                adjacentDirtCount++;
+            }
         }
+
+        return adjacentDirtCount < 2;
     }
 
-    return adjacentDirtCount < 2;
-}
+    #endregion
+    #region Forest Generation
+
+    [Header("ForestSettings")]
+    [Tooltip("Tree Prefab")]
+    public GameObject[] treePrefabs;
+    [Tooltip("Parent Object of all trees")]
+    public GameObject treeholder;
+
+    public float forestScale = 5f;
+    void ForestGenerate()
+    {
+       seed = new Vector2(Random.Range(-1000f, 1000f), Random.Range(-1000f, 1000f));
+
+       // Limpando holder 
+       foreach (Transform child in treeholder.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        bool[,] hasTree = new bool[width, height];
+
+       for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                float xCoord = (float)i / width * forestScale + seed.x;
+                float yCoord = (float)j / height * forestScale + seed.y;
+                float noiseValue = Mathf.PerlinNoise(xCoord, yCoord);
+
+                Vector3Int position = new Vector3Int(i, j, 0);
+
+                if (!grassTilemap.HasTile(position)) continue;
+
+                if (noiseValue > 0.6f && IsAblePutTree(hasTree, i, j))
+                {
+                    PutTree(position);
+                    hasTree[i,j] = true;
+                }
+            }
+        } 
+    }
+
+    bool IsAblePutTree(bool[,] hasTree, int x, int y)
+    {
+        int width = hasTree.GetLength(0);
+        int height = hasTree.GetLength(1);
+
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                // meio
+                if (dx == 0 && dy == 0) continue;
+
+                int nx = x + dx;
+                int ny = y + dy;
+
+                // fora do mapa
+                if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
+
+                if (hasTree[nx, ny])
+                    return false;
+            }
+        }
+
+        return true;
+    }
+    void PutTree(Vector3Int position)
+    {
+        int tree = Random.Range(0, treePrefabs.Length);
+
+        Vector3 worldPos = grassTilemap.GetCellCenterWorld(position);
+
+        Instantiate(treePrefabs[tree], worldPos, Quaternion.identity, treeholder.transform);
+    }
+
+    #endregion
 
 }

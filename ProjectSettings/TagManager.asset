@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Map
+    uniqueID: 3004961527
+    locked: 0
+  - name: Props-Down
+    uniqueID: 266198503
+    locked: 0
+  - name: Player
+    uniqueID: 2392029867
+    locked: 0
+  - name: Props-Up
+    uniqueID: 163576441
+    locked: 0
