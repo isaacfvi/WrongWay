@@ -171,22 +171,23 @@ public class MapGenerator : MonoBehaviour
     #endregion
     #region Forest Generation
 
-    [Header("ForestSettings")]
+    [Header("Forest Settings")]
     [Tooltip("Tree Prefab")]
     public GameObject[] treePrefabs;
     [Tooltip("Parent Object of all trees")]
-    public GameObject treeholder;
+    public GameObject treeHolder;
+    [Tooltip("Grass Prefab")]
+    public GameObject[] grassPrefabs;
+    [Tooltip("Grass parent")]
+    public GameObject grassHolder;
 
     public float forestScale = 5f;
     void ForestGenerate()
     {
        seed = new Vector2(Random.Range(-1000f, 1000f), Random.Range(-1000f, 1000f));
 
-       // Limpando holder 
-       foreach (Transform child in treeholder.transform)
-        {
-            Destroy(child.gameObject);
-        }
+       // Limpando holders 
+       CleanHolder();
 
         bool[,] hasTree = new bool[width, height];
 
@@ -206,6 +207,10 @@ public class MapGenerator : MonoBehaviour
                 {
                     PutTree(position);
                     hasTree[i,j] = true;
+                }
+                else if(noiseValue < 0.2f)
+                {
+                    PutGrass(position);
                 }
             }
         } 
@@ -242,7 +247,30 @@ public class MapGenerator : MonoBehaviour
 
         Vector3 worldPos = grassTilemap.GetCellCenterWorld(position);
 
-        Instantiate(treePrefabs[tree], worldPos, Quaternion.identity, treeholder.transform);
+        Instantiate(treePrefabs[tree], worldPos, Quaternion.identity, treeHolder.transform);
+    }
+
+    void PutGrass(Vector3Int position)
+    {
+        int grass = Random.Range(0, grassPrefabs.Length);
+
+        Vector3 worldPos = grassTilemap.GetCellCenterWorld(position);
+
+        Instantiate(grassPrefabs[grass], worldPos, Quaternion.identity, grassHolder.transform);
+    }
+
+    void CleanHolder()
+    {
+        foreach (Transform child in treeHolder.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in grassHolder.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
     }
 
     #endregion
