@@ -123,7 +123,25 @@ MonoBehaviour:
       m_Action: Move
       m_Flags: 8
     m_Flags: 0
+  runAction:
+    m_Name: Run
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: ab26f055-0b97-41ab-8216-ae81d3ca172d
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: fe7d51a8-b41f-4349-ad0b-11fda14d987b
+      m_Path: <Keyboard>/shift
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Run
+      m_Flags: 0
+    m_Flags: 0
   movementSpeed: 4
+  runScale: 1.5
 --- !u!1 &6301038781960390982
 GameObject:
   m_ObjectHideFlags: 0
