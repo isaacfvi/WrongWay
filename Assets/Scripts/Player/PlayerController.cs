@@ -16,10 +16,12 @@ public class PlayerController : MonoBehaviour
     public float runScale = 1.5f;
     
     private Rigidbody2D rb;
+    private PlayerAnimationController playerAnimation;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerAnimation = GetComponentInChildren<PlayerAnimationController>();
     }
 
     void  OnEnable()
@@ -57,6 +59,8 @@ public class PlayerController : MonoBehaviour
         Vector2 input = moveAction.ReadValue<Vector2>();
 
         rb.velocity = input.normalized * speed;
+
+        playerAnimation.SetFacing(input.x);
     }
 
 }
