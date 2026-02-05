@@ -51,16 +51,28 @@ public class PlayerController : MonoBehaviour
     {
         float speed = movementSpeed;
 
-        if (runAction.IsPressed())
-        {
-            speed *= runScale;
-        }
-
         Vector2 input = moveAction.ReadValue<Vector2>();
 
-        rb.velocity = input.normalized * speed;
+        if (input != Vector2.zero)
+        {
+            if (runAction.IsPressed())
+            {
+                speed *= runScale;
+                playerAnimation.ChangeState(State.Run);
+            }
+            else
+            {
+                playerAnimation.ChangeState(State.Walk);
+            }
 
-        playerAnimation.SetFacing(input.x);
+            playerAnimation.SetFacing(input.x);
+            rb.velocity = input.normalized * speed;
+        }
+        else
+        {
+            playerAnimation.ChangeState(State.Idle);
+            rb.velocity = Vector2.zero;
+        }
     }
 
 }

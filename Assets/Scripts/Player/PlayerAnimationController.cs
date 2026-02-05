@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum State { Idle, Walk, Run, Died }
+
 public class PlayerAnimationController : MonoBehaviour
 {
     private Animator controller;
     private SpriteRenderer sprite;
-    public enum State { Idle }
     private State currentState;
 
     void Awake()
@@ -26,6 +27,8 @@ public class PlayerAnimationController : MonoBehaviour
         SetBool(currentState, false);
 
         SetBool(newState, true);
+
+        currentState = newState;
     }
 
     void SetBool(State state, bool value)
@@ -34,6 +37,15 @@ public class PlayerAnimationController : MonoBehaviour
         {
             case State.Idle: 
                 controller.SetBool("IsIdle", value);
+                break;
+            case State.Walk:
+                controller.SetBool("IsWalk", value);
+                break;
+            case State.Run:
+                controller.SetBool("IsRun", value);
+                break;
+            case State.Died:
+                controller.SetBool("IsDied", value);
                 break;
         }
     }
