@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using NavMeshPlus.Components;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -30,6 +31,8 @@ public class MapGenerator : MonoBehaviour
     public int width = 20;
     [Tooltip("Pelin Noise Scale")]
     public float scale = 1;
+    [Tooltip("NavMesh management surfice controller")]
+    public NavMeshSurface navMeshSurfice;
 
     void Start()
     {
@@ -40,6 +43,7 @@ public class MapGenerator : MonoBehaviour
     {
         LayoutMapGenerate();
         ForestGenerate();
+        FinishMap();
     }
 
     [ContextMenu("Generate New Map")]
@@ -48,7 +52,8 @@ public class MapGenerator : MonoBehaviour
         GenerateMap();
     }
 
-    #region Laout Generation
+
+    #region Layout Generation
 
     private Vector2 seed;
     private float waterThreashHold = 0.2f;
@@ -271,6 +276,38 @@ public class MapGenerator : MonoBehaviour
             Destroy(child.gameObject);
         }
         
+    }
+
+    #endregion
+
+    #region Final config
+
+    void FinishMap()
+    {
+        BakeMap();
+    }
+
+    void BakeMap()
+    {
+        if(navMeshSurfice != null)
+        {
+            StartCoroutine(BakeNavMesh());
+        }
+        else
+        {
+            Debug.LogAssertion("Nav Mesh Surfice not set");
+        }
+    }
+
+    IEnumerator BakeNavMesh()
+    {
+        // wait until tilemap colliders and physics update
+        yield return new WaitForFixedUpdate();
+        yield return new WaitForEndOfFrame();
+
+        navMeshSurfice.RemoveData();
+        navMeshSurfice.BuildNavMesh();
+        navMeshSurfice.AddData();
     }
 
     #endregion
