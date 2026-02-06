@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4148808239487522742}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tree_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 2517982183922882826}
   - component: {fileID: 8153619199872493053}
   - component: {fileID: 5022016903958264945}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,7 +188,8 @@ GameObject:
   - component: {fileID: 8660640507402169892}
   - component: {fileID: 283938817287022043}
   - component: {fileID: 7542839192427065079}
-  m_Layer: 0
+  - component: {fileID: 1344757214947449795}
+  m_Layer: 9
   m_Name: Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -307,3 +308,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.73211956, y: 0.78680134}
   m_EdgeRadius: 0
+--- !u!114 &1344757214947449795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8851367398885082858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: 00000000
