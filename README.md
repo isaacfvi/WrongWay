@@ -1,9 +1,28 @@
 # WrongWay
 
-Imported Assets: 
+## Game in Progress
 
-https://assetstore.unity.com/packages/2d/environments/free-medieval-buildings-objects-pack-2d-346440
+A game about the Curupira, the guardian of the forest. The player embodies this role and their objective is to scare away the illegal loggers who are destroying the forest.
 
-https://penzilla.itch.io/protagonist-character
+### Features in game:
 
-https://github.com/h8man/NavMeshPlus
+- Procedural Map
+- Player animations e moviments
+- Plants Animation
+- NPC follow Inteligence with Pathfinding
+
+### Future features:
+- AI inteligence to fallow trails and attack the player
+- Main Menu
+- Pause Menu
+- Musics and Sounds
+- Player Scary Mechanics
+- NPCs animation and behavor
+- Others
+
+
+## Imported Assets: 
+
+- [Objects and Tilemaps art](https://assetstore.unity.com/packages/2d/environments/free-medieval-buildings-objects-pack-2d-346440)
+- [Art and Animation template](https://penzilla.itch.io/protagonist-character)
+- [NavMeshPlus](https://github.com/h8man/NavMeshPlus)
