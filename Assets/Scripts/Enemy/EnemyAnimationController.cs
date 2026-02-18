@@ -9,7 +9,7 @@ public class EnemyAnimationController : MonoBehaviour
     private SpriteRenderer sprite;
     private State currentState;
 
-    public bool Facing { get; set; }
+    public bool Facing { get; private set; }
 
     void Awake()
     {

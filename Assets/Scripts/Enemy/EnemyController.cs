@@ -16,6 +16,8 @@ public class EnemyController : MonoBehaviour
         agent.isStopped = true;
 
         animationController = GetComponentInChildren<EnemyAnimationController>();
+
+        stateMachine = new EnemyStateMachine();
     }
 
     // Update is called once per frame
@@ -26,6 +28,8 @@ public class EnemyController : MonoBehaviour
 
     protected virtual void Update()
     {   
+        stateMachine.Update();
+
         if(player != null)
         {
             HandleVision();
@@ -34,8 +38,17 @@ public class EnemyController : MonoBehaviour
         HandleMoviment();
     }
 
+    #region State Machine
+
+    protected EnemyStateMachine stateMachine;
+
+    #endregion
+
     #region Moviment
-    protected Transform target;  
+    protected Transform followTransform;
+    protected Vector2 followPosition;
+    protected bool followByTransform;
+    protected bool IsFollowing;
     NavMeshAgent agent;
     EnemyAnimationController animationController;
     
@@ -52,17 +65,24 @@ public class EnemyController : MonoBehaviour
 
     void HandlePathfinding()
     {
-        if (target != null)
+        if (!IsFollowing)
         {
-            agent.SetDestination(target.position);
-            agent.isStopped = false;
+            Stop();
+            return;
+        }
 
-            if (HasReachedDestination())
-            {
-                Stop();
-            }
+        if (followByTransform && followTransform != null)
+        {
+            agent.SetDestination(followTransform.position);
         }
         else
+        {
+            agent.SetDestination(followPosition);
+        }
+
+        agent.isStopped = false;
+
+        if (!followByTransform && HasReachedDestination())
         {
             Stop();
         }
@@ -88,6 +108,25 @@ public class EnemyController : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void Follow(Transform target)
+    {
+        followTransform = target;
+        followByTransform = true;
+        IsFollowing = true;
+    }
+
+    public void Follow(Vector2 position)
+    {
+        followPosition = position;
+        followByTransform = false;
+        IsFollowing = true;
+    }
+
+    public void StopFollowing()
+    {
+        IsFollowing = false;
     }
 
     void OnDrawGizmos()

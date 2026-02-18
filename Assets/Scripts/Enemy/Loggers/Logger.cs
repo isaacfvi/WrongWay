@@ -5,14 +5,6 @@ using UnityEngine.AI;
 
 public class Logger : EnemyController
 {
-    enum State
-    {
-        Patrol,
-        Attack,
-        RunAway,
-        Idle
-    }
-
     public GameObject weapon;
 
     protected override void Start()
@@ -27,11 +19,11 @@ public class Logger : EnemyController
 
     protected override void OnSeePlayer()
     {
-        this.target =  player;
+        this.Follow(player);
     }
 
     protected override void OnLostPlayer()
     {
-        this.target = null;
+        this.StopFollowing();
     }
 }
