@@ -31,6 +31,11 @@ public class IdleState : IEnemyState
             Vector2 newPosition = GenerateNewPosition();
             enemy.Follow(newPosition);
         }
+
+        if (enemy.CanSeePlayer)
+        {
+            enemy.ChangeState(enemy.FollowState);
+        }
     }
 
     bool CheckTime()

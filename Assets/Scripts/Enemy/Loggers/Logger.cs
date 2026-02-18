@@ -7,24 +7,17 @@ public class Logger : EnemyController
 {
     public GameObject weapon;
 
-    IdleState Idle { get; set; }
+    public IdleState IdleState { get; set; }
+    public FollowState FollowState { get; set; }
 
     protected override void Start()
     {
         base.Start();
 
-        Idle = new IdleState(this);
+        IdleState = new IdleState(this);
+        FollowState = new FollowState(this);
 
-        stateMachine.Initialize(Idle);
+        stateMachine.Initialize(IdleState);
     }
 
-    protected override void OnSeePlayer()
-    {
-        this.Follow(player);
-    }
-
-    protected override void OnLostPlayer()
-    {
-        this.StopFollowing();
-    }
 }

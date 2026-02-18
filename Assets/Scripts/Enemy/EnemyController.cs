@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.XR;
 
 public class EnemyController : MonoBehaviour
 {
@@ -41,6 +42,11 @@ public class EnemyController : MonoBehaviour
     #region State Machine
 
     protected EnemyStateMachine stateMachine;
+
+    public void ChangeState(IEnemyState state)
+    {
+        stateMachine.ChangeState(state);
+    }
 
     #endregion
 
@@ -160,10 +166,15 @@ public class EnemyController : MonoBehaviour
     bool wasSeeingPlayer = false;
     float lostTimeCounter = 0;
 
+    public bool CanSeePlayer { get; private set; }
+
+    public Vector2 LastSeenPosition { get; private set; }
+
     void HandleVision()
     {
         Vector2 dirToPlayer = player.position - transform.position;
         float distance = dirToPlayer.magnitude;
+
         bool seeingNow = false;
 
         if (distance <= viewDistance)
@@ -182,30 +193,22 @@ public class EnemyController : MonoBehaviour
         {
             lostTimeCounter = 0f;
 
-            if (!wasSeeingPlayer) {
-                OnSeePlayer();
-                wasSeeingPlayer = true;
-            }
+            CanSeePlayer = true;
+            LastSeenPosition = player.position;
         }
         else
         {
-            // Lost vision
-            if (wasSeeingPlayer)
+            if (CanSeePlayer)
             {
                 lostTimeCounter += Time.deltaTime;
 
                 if (lostTimeCounter >= lostTime)
                 {
-                    OnLostPlayer();
-                    wasSeeingPlayer = false;
+                    CanSeePlayer = false;
                 }
             }
         }
     }
-
-    protected virtual void OnSeePlayer() {}
-    protected virtual void OnLostPlayer() {}
-
     #endregion
 
 }
