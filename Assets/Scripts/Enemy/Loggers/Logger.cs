@@ -7,14 +7,15 @@ public class Logger : EnemyController
 {
     public GameObject weapon;
 
+    IdleState Idle { get; set; }
+
     protected override void Start()
     {
         base.Start();
-    }
 
-    protected override void Update()
-    {
-        base.Update();
+        Idle = new IdleState(this);
+
+        stateMachine.Initialize(Idle);
     }
 
     protected override void OnSeePlayer()

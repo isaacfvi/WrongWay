@@ -91,6 +91,7 @@ public class EnemyController : MonoBehaviour
     protected void Stop()
     {
         agent.isStopped = true;
+        IsFollowing = false;
         agent.ResetPath();
     }
 
