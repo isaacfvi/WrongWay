@@ -20,6 +20,13 @@ public class FollowState : IEnemyState
         {
             enemy.ChangeState(enemy.IdleState);
         } 
+        
+        float distance = Vector2.Distance(enemy.player.position, enemy.transform.position);
+
+        if(distance <= enemy.attackRange)
+        {
+            enemy.ChangeState(enemy.AttackState);
+        }
     }
 
         public void Exit()
