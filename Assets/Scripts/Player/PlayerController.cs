@@ -10,10 +10,20 @@ public class PlayerController : MonoBehaviour
     public InputAction moveAction;
     [Tooltip("Run")]
     public InputAction runAction;
+    [Tooltip("Scream")]
+    public InputAction screamAction;
+
+    [Header("Scream Settings")]
+    [Tooltip("Scream cooldown")]
+    public float screamCooldown = 2f;
+    [Tooltip("Scream cooldown")]
+    public GameObject screamPrefab;
 
     [Header("Moviment Speed Settings")]
     public float movementSpeed = 4.0f;
     public float runScale = 1.5f;
+
+
     
     private Rigidbody2D rb;
     private PlayerAnimationController playerAnimation;
@@ -28,12 +38,14 @@ public class PlayerController : MonoBehaviour
     {
         moveAction.Enable();
         runAction.Enable();
+        screamAction.Enable();
     }
 
     void OnDisable()
     {
         moveAction.Disable();
-        runAction.Enable();
+        runAction.Disable();
+        screamAction.Disable();
     }
 
     // Update is called once per frame
@@ -44,7 +56,10 @@ public class PlayerController : MonoBehaviour
 
     void ProcessInput()
     {
-        HandleMovementInput();  
+        if(!isScreaming)
+            HandleMovementInput();
+
+        HandleScream();
     }
 
     private void HandleMovementInput()
@@ -72,6 +87,32 @@ public class PlayerController : MonoBehaviour
         {
             playerAnimation.ChangeState(State.Idle);
             rb.velocity = Vector2.zero;
+        }
+    }
+
+    bool isScreaming = false;
+
+    IEnumerator Cooldown()
+    {
+        yield return new WaitForSeconds(screamCooldown);
+        isScreaming = false;
+    }
+
+    public void HandleScream()
+    {
+        if(isScreaming) return;
+
+        if (screamAction.WasPressedThisFrame())
+        {
+            isScreaming = true;
+            playerAnimation.ChangeState(State.Idle);
+            rb.velocity = Vector2.zero;
+            StartCoroutine(Cooldown());
+
+            if(screamPrefab != null)
+            {
+                Instantiate(screamPrefab, transform.position, transform.rotation, null);
+            }
         }
     }
 
