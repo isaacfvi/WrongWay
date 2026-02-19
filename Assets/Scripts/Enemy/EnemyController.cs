@@ -162,8 +162,6 @@ public class EnemyController : MonoBehaviour
     public Transform player;
     [Tooltip("Lost Time")]
     public float lostTime = 2f;
-
-    bool wasSeeingPlayer = false;
     float lostTimeCounter = 0;
 
     public bool CanSeePlayer { get; private set; }
