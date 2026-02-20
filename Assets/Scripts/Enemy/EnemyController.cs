@@ -15,16 +15,11 @@ public class EnemyController : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
         agent.isStopped = true;
+        agent.speed = speed;
 
         animationController = GetComponentInChildren<EnemyAnimationController>();
 
         stateMachine = new EnemyStateMachine();
-    }
-
-    // Update is called once per frame
-    protected virtual void FixedUpdate()
-    {
-        
     }
 
     protected virtual void Update()
@@ -51,6 +46,8 @@ public class EnemyController : MonoBehaviour
     #endregion
 
     #region Moviment
+
+    public float speed = 3.5f;
     protected Transform followTransform;
     protected Vector2 followPosition;
     protected bool followByTransform;
@@ -134,6 +131,11 @@ public class EnemyController : MonoBehaviour
     public void StopFollowing()
     {
         IsFollowing = false;
+    }
+
+    public void SetSpeed(float speed)
+    {
+        agent.speed = speed;
     }
 
     void OnDrawGizmos()
